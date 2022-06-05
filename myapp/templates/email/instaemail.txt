@@ -1,0 +1,3 @@
+Hello {{name}}
+
+Welcome to the Insta-clone. Here you get the same experience as the popular social app Instagram. Post your photos and become famous
