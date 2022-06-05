@@ -3,12 +3,13 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime as dt
 import django.utils.timezone
+from cloudinary.models import CloudinaryField
 
 
 # Create your models here.
 class Post(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,default='')
-    image = models.ImageField(upload_to = 'posts/', default='No Image')
+    image = CloudinaryField('image',default='No Image')
     caption = models.CharField(max_length=120)
     likes = models.IntegerField(default=0)
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -46,6 +47,11 @@ class Post(models.Model):
         post = cls.objects.filter()
         return post
     
+    
+LIKE_CHOICES = (
+    ('Like', 'Like'),
+    ('Unlike', 'Unlike'),)
+
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
@@ -60,7 +66,7 @@ class Comment(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
-    photo = models.ImageField(upload_to = 'posts/', default='No Image')
+    photo = CloudinaryField('image',default='No Image')
     bio = models.TextField(max_length=255)
 
     def save_profile(self):
@@ -89,3 +95,11 @@ class Profile(models.Model):
     def get_by_id(cls, id):
         profile = cls.objects.get(id=id)
         return profile
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null = True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null = True)
+    value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10, null = True)
+
+    def __str__(self):
+        return self.post

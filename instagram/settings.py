@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 from decouple import config,Csv
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 import os
 import myapp
@@ -45,6 +48,7 @@ INSTALLED_APPS = [
     'myapp',
     'crispy_forms',
     'bootstrap4',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +138,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+cloudinary.config( 
+  cloud_name = "andyphotos", 
+  api_key = "978166777643715", 
+  api_secret = "d5wDexGnvqxseJGgsNszjZ8bF5U" 
+)
