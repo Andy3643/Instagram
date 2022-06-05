@@ -56,3 +56,36 @@ class Comment(models.Model):
     def get_comments(cls):
         comments = cls.objects.all()
         return comments
+    
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
+    photo = models.ImageField(upload_to = 'posts/', default='No Image')
+    bio = models.TextField(max_length=255)
+
+    def save_profile(self):
+        '''
+        add new profile to db
+        '''
+        self.save()
+
+    def delete_profile(self):
+        '''
+        delete  user from db
+        '''
+        self.delete()
+
+    def updateProfile(self, update):
+       self.bio = update
+       self.photo = update
+       self.save
+
+    @classmethod
+    def search_profile(cls, search_term):
+        user = cls.objects.filter(user__username__icontains=search_term)
+        return user 
+
+    @classmethod
+    def get_by_id(cls, id):
+        profile = cls.objects.get(id=id)
+        return profile
