@@ -1,8 +1,11 @@
 from django.shortcuts import render,redirect
-from .forms import UserRegisterForm,ProfileUpdateForm,UserUpdateForm
+from .forms import UserRegisterForm,ProfileUpdateForm,UserUpdateForm,CommentForm
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate, login, logout
+from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def register(request):
     '''
@@ -14,7 +17,7 @@ def register(request):
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data['password1']
-            login(request, user)
+            login(request,User)
             messages.success(request,f"Your Account Has Been Created.Proceed  to Login!")
             return redirect('login')
     else:
@@ -45,3 +48,45 @@ def login_page(request):
 def logoutUser(request):
 	logout(request)
 	return redirect('login')
+
+
+#@login_required
+def index(request):
+
+    # Default view
+    current_user = request.user
+    posts = Post.objects.all()
+    comments = Comment.get_comments()
+    profiles = Profile.objects.all()
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = current_user
+            comment.post = Post.objects.get(id=int(request.POST["post_id"]))
+            comment.save()
+            return redirect('home')
+    else:
+        form = CommentForm()
+
+    return render(request, 'temps/index.html', {'current_user':current_user,'posts':posts, 'form':form, 'comments':comments,'profiles':profiles})
+
+
+
+
+
+#class based views for user uploading
+class ImageCreateView(LoginRequiredMixin,CreateView):
+    '''
+    Class based view for adding new image
+    '''
+    model = Post
+    fields = ['image','caption']
+
+    def form_valid(self,form):
+        '''
+        form overide to set user who uploaded image
+        '''
+        form.instance.profile = self.request.user
+        return super().form_valid(form)
