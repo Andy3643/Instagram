@@ -58,11 +58,19 @@ class Comment(models.Model):
     comment = models.CharField(max_length=255)
     pub_date = models.DateTimeField(auto_now_add=True)
 
+    def save_comment(self):
+        self.save()
+
+    def delete_comment(self):
+        self.delete()
+        
     @classmethod
     def get_comments(cls):
         comments = cls.objects.all()
-        return comments
+        return 
     
+    def __str__(self):
+        return self.comment
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
