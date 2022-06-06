@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import UserRegisterForm,ProfileUpdateForm,UserUpdateForm,CommentForm
+from .forms import *
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate, login, logout
@@ -70,9 +70,22 @@ def index(request):
     else:
         form = CommentForm()
 
-    return render(request, 'temps/index.html', {'current_user':current_user,'posts':posts, 'form':form, 'comments':comments,'profiles':profiles})
+    return render(request, 'index.html', {'current_user':current_user,'posts':posts, 'form':form, 'comments':comments,'profiles':profiles})
 
-
+#@login_required()
+def new_post(request):
+    current_user = request.user
+   
+    if request.method == 'POST':
+        form = NewPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user= current_user
+            post.save()
+        return redirect('home')
+    else:
+        form = NewPostForm()
+    return render(request, 'posts/newpost.html', {'current_user':current_user, 'form':form})
 
 
 

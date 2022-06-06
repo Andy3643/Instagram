@@ -33,6 +33,12 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['bio','profile_pic']
 
 
+
+class NewPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ['user', 'pub_date', 'likes']
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

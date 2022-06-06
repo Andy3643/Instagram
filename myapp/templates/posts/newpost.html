@@ -1,0 +1,24 @@
+{%extends 'base.html'%}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block styles %}
+    {% bootstrap_css %}
+{% endblock %}
+
+{%block content%}
+
+<div class="container text-center">
+    <div class="card" style="margin-top:5%;">
+        <h2 class="card-header" style="font-family: 'Grand Hotel', cursive;">Upload Image</h2>
+        <form enctype="multipart/form-data" method="POST" action="" class="card-header">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class='btn btn-primary' value="Upload" />
+        </form>
+    </div>
+</div>
+
+
+{%endblock%}
