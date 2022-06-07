@@ -1,0 +1,96 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+        <p class="text-center"><a href="{% url 'image_upload' %}"><i class="fa fa-upload"></i> | Upload Image</a></p>
+      {% if images %}
+      {% for image in images %}
+      <div class="card">
+        <div class="card-heading">
+          <div class="placing">
+            <a href="{% url 'single_profile' image.profile.id %}"><img src="{{ image.profile.profile.profile_pic.url }}"
+                alt="profile picture" class="rounded-circle custom-display border border-danger"></a>
+            <p class="ml-3">{{ image.profile.username }}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="card-body">
+          <a href="{% url 'image_detail' image.id%}"><img src="{{ image.image.url }}" alt="{{ image.image_name }} image"
+              class="display-images img-fluid"></a>
+          <br><br>
+          <p>
+            <a href="{% url 'image-like' image.id %}"><i class="fa fa-heart"></i></a>
+            | {{ image.likes_set.all|length }} <i class="fa fa-comments"></i> | {{ image.comment_set.all|length }}
+          </p>
+          <p>{{ image.image_caption }}</p><br>
+          <p>comments:</p>
+          {% if image.comment_set.all %}
+          {% for comment in image.comment_set.all|slice:"2" %}
+          <p><a href="{% url 'single_profile' comment.user.profile.id %}"><img
+                src="{{ comment.user.profile.profile_pic.url }}" alt="profile picture"
+                class="rounded-circle custom-display border border-danger"></a><strong>{{ comment.user.username }}</strong>:
+            {{ comment.comment }}</p>
+          {% endfor %}
+          <a href="{% url 'image_detail' image.id %}">
+            <p>View all {{ image.comment_set.all|length }} comments</p>
+          </a>
+          {% endif %}
+        </div>
+        <div class="card-footer">
+          {% if image.profile == user %}
+          <button type="button" data-toggle="modal" data-target="#image{{ image.id }}">
+            <i class="fa fa-cogs"></i>
+          </button>
+
+          <div class="modal fade" id="image{{ image.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="text-center">
+                    <a href="{% url 'image_update' image.id %}">Update</a>
+                    <hr>
+                    <a href="{% url 'image_delete' image.id %}">Delete</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <form method="POST" class="form-inline" action="{% url 'image-comment'  image.id %}">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-success btn-sm" value="Post">
+          </form>
+        </div>
+      </div><br><br><br>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-4">
+      <div class="placing side-view">
+        <a href="{% url 'single_profile' user.profile.id %}"><img src="{{ user.profile.profile_pic.url }}"
+            alt="profile picture" class="rounded-circle custom-display border border-danger"></a>
+        <p class="ml-3">{{ user.profile.user }}</p>
+      </div><br><br>
+        <div>
+          {% if users %}
+          <p>Suggested Users</p>
+          <div class="overflowstyle">
+          {% for reg_user in users %}
+          <div class="placing">
+              <a href="{% url 'single_profile' reg_user.profile.id %}"><img src="{{ reg_user.profile.profile_pic.url }}"
+                  alt="profile picture" class="rounded-circle custom-display border border-danger"></a>
+              <p class="ml-3">{{ reg_user.username }}</p>
+            </div>
+          {% endfor %}
+        </div>
+          {% endif %}
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

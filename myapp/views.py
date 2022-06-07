@@ -3,7 +3,7 @@ from .forms import *
 from django.contrib import messages
 from .models import *
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import CreateView
+from django.views.generic import CreateView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -89,6 +89,45 @@ def new_post(request):
 
 
 
+#@login_required
+def CommentOnImage(request,pk):
+    '''
+    View for commenting on a specfic image
+    '''
+    current_user = request.user
+    current_image = Post.objects.get(id=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = current_user
+            comment.image = current_image
+            comment.save()
+            return redirect(index)
+    else:       
+        return redirect(index)
+    
+#@login_required
+def OtherProfile(request,pk):
+    '''
+    Display user profile
+    '''
+    user = User.objects.get(pk=pk)
+    users = User.objects.all()
+    current_user = request.user
+    posts = Post.objects.filter(profile=user)
+    context = {
+        "user":user,
+        "posts":posts,
+        "users":users,
+        "current_user":current_user
+    }
+    return render(request,"users/profile.html",context)
+
+
+
+
+
 #class based views for user uploading
 class ImageCreateView(LoginRequiredMixin,CreateView):
     '''
@@ -103,3 +142,9 @@ class ImageCreateView(LoginRequiredMixin,CreateView):
         '''
         form.instance.profile = self.request.user
         return super().form_valid(form)
+    
+class ImageDetailView(LoginRequiredMixin,DetailView):
+    '''
+    Class based view for viewing specific image with its details
+    '''
+    model = Post

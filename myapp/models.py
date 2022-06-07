@@ -109,13 +109,13 @@ class Profile(models.Model):
         profile = cls.objects.get(id=id)
         return profile
 
-class Like(models.Model):
+class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null = True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null = True)
-    value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10, null = True)
+    image_like = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.post
+        return self.like
     
 class Follow(models.Model):
     follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following')
