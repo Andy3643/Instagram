@@ -12,7 +12,7 @@ class Post(models.Model):
     #image = CloudinaryField('image',default='No Image')
     image=models.ImageField(upload_to='posts/')
     caption = models.CharField(max_length=120)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True, )
     pub_date = models.DateTimeField(auto_now_add=True)
      
        
@@ -109,7 +109,7 @@ class Profile(models.Model):
         profile = cls.objects.get(id=id)
         return profile
 
-class Likes(models.Model):
+class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null = True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null = True)
     image_like = models.IntegerField(default=0)
