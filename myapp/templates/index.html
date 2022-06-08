@@ -18,17 +18,17 @@
                 <div class="card-heading">
                   <div class="placing">
                     <a href=""><img src="{{ image.profile.profile.profile_pic.url }}"
-                        alt="profile picture" class="rounded-circle custom-display border border-danger"></a>
+                        alt="display-pic" class="rounded-circle custom-display border border-danger"></a>
                     <p class="ml-3">{{ image.profile.username }}</p>
                   </div>
                 </div>
                 <hr>
                 <div class="card-body">
-                  <img src="{{ image.image.url }}" alt="{{ image.image_name }} image"
+                  <img src="{{image.image.url }}" alt="{{ image.image_name }} image"
                       class="display-images img-fluid">
                   <br><br>
                   <p>
-                    <a href="{% url 'image-like' image.id %}"><i class="fa fa-heart"></i></a>
+                    <a href=""><i class="fa fa-heart"></i></a>
                     | {{ image.likes_set.all|length }} <i class="fa fa-comments"></i> | {{ image.comment_set.all|length }}
                   </p>
                   <p>{{ image.caption }}</p><br>

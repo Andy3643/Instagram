@@ -29,20 +29,22 @@ def register(request):
 
 
 def login_page(request):
-	if request.method == "POST":
-		username = request.POST['username']
-		password = request.POST['password']
-		user = authenticate(request, username=username, password=password)
-		if user is not None:
-			login(request, user)
-			return redirect('post')
-		else:
-			messages.success(request, ("There Was An Error Logging In, Try Again..."))	
-			return redirect('login')	
+    if request.user.is_authenticated:
+        return redirect('profile')
+    
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('post')
+        else:
+            messages.success(request, ("There Was An Error Logging In, Try Again..."))	
+            return redirect('login')	
 
-
-	else:
-		return render(request, 'users/login.html', {})
+    else:
+	    return render(request, 'users/login.html', {})
 
 
 def logoutUser(request):
@@ -51,28 +53,58 @@ def logoutUser(request):
 
 
 #@login_required
+# def profile(request):
+#     '''
+#     This method handles the user profile 
+#     '''
+#     title = 'Profile'
+#     if request.method == "POST":
+#         u_form = UserUpdateForm(request.POST,instance=request.user)
+#         p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
+#         if u_form.is_valid() and p_form.is_valid():
+#             u_form.save()
+#             p_form.save()
+#             messages.success(request,f"You Have Successfully Updated Your Profile!")
+#             return redirect('profile')
+#     else:
+#         u_form = UserUpdateForm(instance=request.user)
+#         p_form = ProfileUpdateForm(instance=request.user.profile)
+#     context = {
+#         'title':title,
+#         'u_form':u_form,
+#         'p_form':p_form 
+#     }
+#     return render(request,'users/profile.html',context)
+
+#@login_required
 def profile(request):
-    '''
-    This method handles the user profile 
-    '''
-    title = 'Profile'
-    if request.method == "POST":
-        u_form = UserUpdateForm(request.POST,instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile) 
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request,f"You Have Successfully Updated Your Profile!")
-            return redirect('profile')
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile') # Redirect back to profile page
+
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
+
     context = {
-        'title':title,
-        'u_form':u_form,
-        'p_form':p_form 
+        'u_form': u_form,
+        'p_form': p_form
     }
-    return render(request,'users/profile.html',context)
+    return render(request, 'users/profile.html', context)
+
+
+
+
+
+
+
 
 #@login_required
 def index(request):

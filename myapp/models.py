@@ -9,8 +9,8 @@ from cloudinary.models import CloudinaryField
 # Create your models here.
 class Post(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,default='')
-    #image = CloudinaryField('image',default='No Image')
-    image=models.ImageField(upload_to='posts/')
+    image = CloudinaryField('image',default='No Image')
+    # image=models.ImageField(upload_to='posts/')
     caption = models.CharField(max_length=120)
     likes = models.ManyToManyField(User, related_name='likes', blank=True, )
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -75,8 +75,8 @@ class Comment(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
-    profile_pic=models.ImageField(upload_to='pictures/',default='default.png')
-    #photo = CloudinaryField('image',default='No Image')
+    # profile_pic=models.ImageField(upload_to='pictures/',default='default.png')
+    profile_pic= CloudinaryField('image',default='No Image')
     bio = models.TextField(max_length=255)
 
     def __str__(self):

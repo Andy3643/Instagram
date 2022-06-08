@@ -13,7 +13,7 @@ urlpatterns = [
    path(r'^user/(?P<pk>\d+)',views.OtherProfile,name="single_profile"),
    path(r'^image/(?P<pk>\d+)$',views.ImageDetailView.as_view(),name="image_detail"),
    path(r'^comment/(?P<pk>\d+)',views.CommentOnImage,name="image-comment"),
-   path('profile/<username>/', views.profile, name='profile'),
+   path(r'^profile/', views.profile, name='profile')
   
    #path('user_profile/<username>/', views.user_profile, name='user_profile'),
    #path(r'^image/(\d+)',views.image,name ='image'),
