@@ -16,8 +16,6 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            password = form.cleaned_data['password1']
-            login(request,User)
             messages.success(request,f"Your Account Has Been Created.Proceed  to Login!")
             return redirect('login')
     else:
@@ -30,7 +28,7 @@ def register(request):
 
 def login_page(request):
     if request.user.is_authenticated:
-        return redirect('profile')
+        return redirect('home')
     
     if request.method == "POST":
         username = request.POST['username']
@@ -38,7 +36,7 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('post')
+            return redirect('home')
         else:
             messages.success(request, ("There Was An Error Logging In, Try Again..."))	
             return redirect('login')	
@@ -76,7 +74,7 @@ def logoutUser(request):
 #     }
 #     return render(request,'users/profile.html',context)
 
-#@login_required
+@login_required
 def profile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -106,7 +104,7 @@ def profile(request):
 
 
 
-#@login_required
+@login_required
 def index(request):
 
     # Default view
@@ -128,7 +126,7 @@ def index(request):
 
     return render(request, 'index.html', {'current_user':current_user,'posts':posts, 'form':form, 'comments':comments,'profiles':profiles})
 
-#@login_required()
+@login_required()
 def new_post(request):
     current_user = request.user
    
@@ -145,7 +143,7 @@ def new_post(request):
 
 
 
-#@login_required
+@login_required
 def CommentOnImage(request,pk):
     '''
     View for commenting on a specfic image
@@ -163,7 +161,7 @@ def CommentOnImage(request,pk):
     else:       
         return redirect(index)
     
-#@login_required
+@login_required
 def OtherProfile(request,pk):
     '''
     Display user profile

@@ -1,10 +1,10 @@
-<h1>Display user profile</h1>
+
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
 
 {% block content %}
-<div class="container">
+<div class="container mt-5">
 <div class="row">
     <div class="col-md-4">
     <div class="content-section">
@@ -17,10 +17,13 @@
             </div>
             
         </div><!-- Button trigger modal -->
+        <div class="mt-5">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
             Update Profile
           </button>
-        
+          &nbsp;&nbsp;&nbsp;
+          <a href="{% url 'home' %}"> <button class="btn btn-primary" >View Main page</button></a>
+        </div>
     </div>
 </div>
 <div class="col-md-8"></div>
