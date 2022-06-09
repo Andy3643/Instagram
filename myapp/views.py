@@ -44,35 +44,10 @@ def login_page(request):
     else:
 	    return render(request, 'users/login.html', {})
 
-
 def logoutUser(request):
 	logout(request)
 	return redirect('login')
 
-
-#@login_required
-# def profile(request):
-#     '''
-#     This method handles the user profile 
-#     '''
-#     title = 'Profile'
-#     if request.method == "POST":
-#         u_form = UserUpdateForm(request.POST,instance=request.user)
-#         p_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.profile)
-#         if u_form.is_valid() and p_form.is_valid():
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request,f"You Have Successfully Updated Your Profile!")
-#             return redirect('profile')
-#     else:
-#         u_form = UserUpdateForm(instance=request.user)
-#         p_form = ProfileUpdateForm(instance=request.user.profile)
-#     context = {
-#         'title':title,
-#         'u_form':u_form,
-#         'p_form':p_form 
-#     }
-#     return render(request,'users/profile.html',context)
 
 @login_required
 def profile(request):
@@ -96,13 +71,6 @@ def profile(request):
         'p_form': p_form
     }
     return render(request, 'users/profile.html', context)
-
-
-
-
-
-
-
 
 @login_required
 def index(request):
@@ -177,11 +145,6 @@ def OtherProfile(request,pk):
         "current_user":current_user
     }
     return render(request,"users/profile.html",context)
-
-
-
-
-
 
 #class based views for user uploading
 class ImageCreateView(LoginRequiredMixin,CreateView):
